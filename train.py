@@ -1,6 +1,9 @@
 import os
 import tensorflow as tf
-data = tf.keras.datasets.fashion_mnist
+from tensorflow.examples.tutorials.mnist import input_data
+
+
+data = input_data.read_data_sets('/data/fashion_mnist')
 
 (training_images,
  training_labels), (test_images,
