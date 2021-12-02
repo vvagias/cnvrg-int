@@ -1,40 +1,53 @@
-import os
 import tensorflow as tf
-from tensorflow.examples.tutorials.mnist import input_data
+import os
+from tensorflow.keras.optimizers import RMSprop
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
+model = tf.keras.models.Sequential([
+    # Note the input shape is the desired size of the image 300x300 with 3 bytes color
+    # This is the first convolution
+    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(300, 300, 3)),
+    tf.keras.layers.MaxPooling2D(2, 2),
+    # The second convolution
+    tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # The third convolution
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # The fourth convolution
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # The fifth convolution
+    tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
+    tf.keras.layers.MaxPooling2D(2,2),
+    # Flatten the results to feed into a DNN
+    tf.keras.layers.Flatten(),
+    # 512 neuron hidden layer
+    tf.keras.layers.Dense(512, activation='relu'),
+    # Only 1 output neuron. It will contain a value from 0-1 where 0 for 1 class ('horses') and 1 for the other ('humans')
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
 
-data = input_data.read_data_sets('/data/fashion_mnist')
+model.compile(loss='binary_crossentropy',
+              optimizer=RMSprop(lr=0.001),
+              metrics=['acc'])
 
-(training_images,
- training_labels), (test_images,
-                    test_labels) = data.load_data()
-training_images = training_images.reshape(60000, 28, 28, 1)
-training_images = training_images / 255.0
-test_images = test_images.reshape(10000, 28, 28, 1)
-test_images = test_images / 255.0
+# All images will be rescaled by 1./255
+train_datagen = ImageDataGenerator(rescale=1/255)
 
-model = tf.keras.models.Sequential(
-    [
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu',
-                               input_shape=(28, 28, 1)),
-        tf.keras.layers.MaxPooling2D(2, 2),
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(2, 2),
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(128, activation=tf.nn.relu),
-        tf.keras.layers.Dense(10, activation=tf.nn.softmax)
-    ]
-)
+# Flow training images in batches of 128 using train_datagen generator
+train_generator = train_datagen.flow_from_directory(
+        '/data/horse-or-human/',  # This is the source directory for training images
+        target_size=(300, 300),  # All images will be resized to 150x150
+        batch_size=128,
+        # Since we use binary_crossentropy loss, we need binary labels
+        class_mode='binary')
 
-model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
-              metrics=['accuracy'])
-
-model.fit(training_images, training_labels, epochs=5)
-
-model.evaluate(test_images, test_labels)
-
-print(model.summary)
+history = model.fit_generator(
+      train_generator,
+      steps_per_epoch=8,
+      epochs=15,
+      verbose=1)
 
 if not os.path.exists('output'):
     os.mkdir('output')
