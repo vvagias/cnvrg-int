@@ -17,7 +17,6 @@ def predict(file_url):
     classes = model.predict(image_tensor)
     print(classes)
     print(classes[0])
-    e.log_metric("digit", classes[0])
     if classes[0] > 0.5:
         return "human"
     else:
