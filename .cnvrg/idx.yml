@@ -1,0 +1,23 @@
+---
+:tree:
+  train.py:
+    :sha1: ec981e0be46bc08acf74c2ece432961e0c948e8f
+    :commit_time: 
+    :last_modified: 1638467742.6199982
+  README.md:
+    :sha1: a4294b4ca8882faf5bc84aa9fcce500b35690098
+    :commit_time: 
+    :last_modified: 1638467742.6199982
+  predict.py:
+    :sha1: 3efe704b40fe14ad1734a08cc9c652a545e2f337
+    :commit_time: 
+    :last_modified: 1638467742.6199982
+  requirements.txt:
+    :sha1: 879dd5fd9d8aa44f3ba09852f8927c3c6be3acce
+    :commit_time: 
+    :last_modified: 1638467742.6199982
+  ".cnvrgignore":
+    :sha1: 99823fc2a8f6ea8992fcace85d0e8ca21194d54b
+    :commit_time: 
+    :last_modified: 1638467748.5880425
+:commit: 
