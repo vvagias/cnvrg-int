@@ -4,7 +4,7 @@ from keras.models import load_model
 from keras.preprocessing import image
 import urllib
 
-model = load_model('output/imagizer.model.h5')
+model = load_model('/input/train/output/imagizer.model.h5')
 e = Endpoint()
 
 
