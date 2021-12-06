@@ -14,6 +14,7 @@ model = load_model(args.model)
 
 
 def predict(file_url):
+    print(file_url)
     r = requests.get(file_url)
     ext = r.headers['content-type'].split('/')[-1]
     with open(f"image.{ext}", 'wb') as f:
