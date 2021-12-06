@@ -44,26 +44,25 @@ train_datagen = ImageDataGenerator(rescale=1/255,
 train_generator = train_datagen.flow_from_directory(
         args.data_path,
         target_size=(300, 300),
-        batch_size=64,
+        batch_size=32,
         class_mode='binary',
         subset='training')
 
 validation_generator = train_datagen.flow_from_directory(
         args.data_path,
         target_size=(300, 300),
-        batch_size=96,
+        batch_size=32,
         class_mode='binary',
         subset='validation')
 
 history = model.fit(
       train_generator,
-      steps_per_epoch=train_generator.samples // 96,
+      steps_per_epoch=train_generator.samples // 32,
       epochs=args.epochs,
       validation_data=validation_generator,
-      validation_steps=validation_generator.samples // 96,
+      validation_steps=validation_generator.samples // 32,
       verbose=1)
 
-print(history.__dict__)
 print('cnvrg_tag_test_accuracy: ', history.history['val_acc'][-1])
 print('cnvrg_tag_test_loss: ', history.history['val_loss'][-1])
 if not os.path.exists('output'):

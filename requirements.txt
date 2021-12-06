@@ -1,6 +1,7 @@
 numpy
 nltk
 pyarrow
+requests
 #inference on cpu
 tensorflow-cpu
 #uncomment bellow and comment above to train on a GPU
