@@ -1,7 +1,14 @@
 import tensorflow as tf
 import os
+import argparse
 from tensorflow.keras.optimizers import RMSprop
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+help_msg = "This loads in a trained modeal and returns a prediction"
+parser = argparse.ArgumentParser(description=help_msg)
+parser.add_argument("-e", "--epochs", type=int, help="Path to the model")
+parser.add_argument("-s", "--steps", type=int, help="Link to image")
+args = parser.parse_args()
 
 model = tf.keras.models.Sequential([
     # Note the input shape is the desired size of the image 300x300 with 3 bytes color
@@ -37,7 +44,7 @@ train_datagen = ImageDataGenerator(rescale=1/255)
 
 # Flow training images in batches of 128 using train_datagen generator
 train_generator = train_datagen.flow_from_directory(
-        '/data/horse-or-human/',  # This is the source directory for training images
+        '/Users/craigsmith/Downloads/horse-or-human',  # This is the source directory for training images
         target_size=(300, 300),  # All images will be resized to 150x150
         batch_size=128,
         # Since we use binary_crossentropy loss, we need binary labels
@@ -45,8 +52,8 @@ train_generator = train_datagen.flow_from_directory(
 
 history = model.fit_generator(
       train_generator,
-      steps_per_epoch=8,
-      epochs=15,
+      steps_per_epoch=args.steps,
+      epochs=args.epochs,
       verbose=1)
 
 if not os.path.exists('output'):
