@@ -2,7 +2,8 @@ import tensorflow as tf
 import os
 import argparse
 from tensorflow.keras.optimizers import RMSprop
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+# from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras import preprocessing as keras_pre
 
 help_msg = "This loads in a trained modeal and returns a prediction"
 parser = argparse.ArgumentParser(description=help_msg)
@@ -10,6 +11,10 @@ parser.add_argument("-e",
                     "--epochs",
                     type=int,
                     help="Number of epochs")
+parser.add_argument("-s",
+                    "--steps",
+                    type=int,
+                    help="Number of steps")
 parser.add_argument("-d",
                     "--data_path",
                     type=str,
@@ -38,29 +43,37 @@ model.compile(loss='binary_crossentropy',
               optimizer=RMSprop(learning_rate=0.001),
               metrics=['acc'])
 
-train_datagen = ImageDataGenerator(rescale=1/255,
-                                   validation_split=0.2)
+# train_datagen = ImageDataGenerator(rescale=1/255,
+#                                   validation_split=0.2)
 
-train_generator = train_datagen.flow_from_directory(
+train_generator = keras_pre.image_dataset_from_directory(
         args.data_path,
-        target_size=(300, 300),
+        labels="inferred",
+        label_mode="binary",
+        seed=45,
+        image_size=(300, 300),
+        class_names=["horses", "humans"],
         batch_size=32,
-        class_mode='binary',
+        validation_split=0.2,
         subset='training')
 
-validation_generator = train_datagen.flow_from_directory(
+validation_generator = keras_pre.image_dataset_from_directory(
         args.data_path,
-        target_size=(300, 300),
+        labels="inferred",
+        label_mode="binary",
+        image_size=(300, 300),
+        seed=45,
+        class_names=["horses", "humans"],
         batch_size=32,
-        class_mode='binary',
+        validation_split=0.2,
         subset='validation')
 
 history = model.fit(
       train_generator,
-      steps_per_epoch=train_generator.samples // 32,
+      steps_per_epoch=args.steps,
       epochs=args.epochs,
       validation_data=validation_generator,
-      validation_steps=validation_generator.samples // 32,
+      validation_steps=args.steps,
       verbose=1)
 
 print('cnvrg_tag_test_accuracy: ', history.history['val_acc'][-1])

@@ -25,10 +25,8 @@ def predict(file_url):
     x = np.expand_dims(x, axis=0)
     image_tensor = np.vstack([x])
     classes = model.predict(image_tensor)
-    print(classes)
-    print(classes[0])
     print(classes[0][0])
-    if classes[0] > 0.5:
+    if classes[0][0] > 0.5:
         print("human")
         return "human"
     else:
