@@ -11,10 +11,6 @@ parser.add_argument("-e",
                     "--epochs",
                     type=int,
                     help="Number of epochs")
-parser.add_argument("-s",
-                    "--steps",
-                    type=int,
-                    help="Number of steps")
 parser.add_argument("-d",
                     "--data_path",
                     type=str,
@@ -67,13 +63,10 @@ validation_generator = keras_pre.image_dataset_from_directory(
         batch_size=32,
         validation_split=0.2,
         subset='validation')
-
 history = model.fit(
       train_generator,
-      steps_per_epoch=args.steps,
       epochs=args.epochs,
       validation_data=validation_generator,
-      validation_steps=args.steps,
       verbose=1)
 
 print('cnvrg_tag_test_accuracy: ', history.history['val_acc'][-1])
