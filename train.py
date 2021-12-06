@@ -6,7 +6,14 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 help_msg = "This loads in a trained modeal and returns a prediction"
 parser = argparse.ArgumentParser(description=help_msg)
-parser.add_argument("-e", "--epochs", type=int, help="Path to the model")
+parser.add_argument("-e",
+                    "--epochs",
+                    type=int,
+                    help="Number of epochs")
+parser.add_argument("-d",
+                    "--data_path",
+                    type=str,
+                    help="Path to the data source")
 args = parser.parse_args()
 
 model = tf.keras.models.Sequential([
@@ -35,14 +42,14 @@ train_datagen = ImageDataGenerator(rescale=1/255,
                                    validation_split=0.2)
 
 train_generator = train_datagen.flow_from_directory(
-        '/Users/craigsmith/Downloads/horse-or-human',
+        args.data_path,
         target_size=(300, 300),
         batch_size=64,
         class_mode='binary',
         subset='training')
 
 validation_generator = train_datagen.flow_from_directory(
-        '/Users/craigsmith/Downloads/horse-or-human',
+        args.data_path,
         target_size=(300, 300),
         batch_size=96,
         class_mode='binary',
