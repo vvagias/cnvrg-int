@@ -10,6 +10,8 @@ parser = argparse.ArgumentParser(description=help_msg)
 parser.add_argument("-m", "--model", help="Path to the model")
 parser.add_argument("-u", "--image_url", help="Link to image")
 args = parser.parse_args()
+if not args.model:
+    args.model = "./output/imagizer.model.h5"
 model = load_model(args.model)
 
 
