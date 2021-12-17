@@ -1,18 +1,10 @@
-import argparse
 import numpy as np
 from keras.models import load_model
 from keras.preprocessing import image
 import requests
 
 
-help_msg = "This loads in a trained modeal and returns a prediction"
-parser = argparse.ArgumentParser(description=help_msg)
-parser.add_argument("-m", "--model", help="Path to the model")
-parser.add_argument("-u", "--image_url", help="Link to image")
-args = parser.parse_args()
-if not args.model:
-    args.model = "./output/imagizer.model.h5"
-model = load_model(args.model)
+model = load_model("/input/train_the_model/imagizer.model.h5")
 
 
 def predict(file_url):
@@ -34,7 +26,3 @@ def predict(file_url):
     else:
         print("horse")
         return "horse"
-
-
-if __name__ == '__main__':
-    predict(args.image_url)
