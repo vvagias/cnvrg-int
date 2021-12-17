@@ -73,4 +73,4 @@ print('cnvrg_tag_test_accuracy: ', history.history['val_acc'][-1])
 print('cnvrg_tag_test_loss: ', history.history['val_loss'][-1])
 if not os.path.exists('output'):
     os.mkdir('output')
-model.save('output/imagizer.model.h5')
+model.save('imagizer.model.h5')
